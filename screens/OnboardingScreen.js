@@ -2,51 +2,61 @@
 import { useState } from 'react';
 import { ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-export default function OnboardingScreen({ onNextScreen }) {
+export default function OnboardingScreen({ onFinish }) {
   const [step, setStep] = useState(0);
 
+  // Figma дизайнындағы 3 түрлі onboarding бетінің мәліметтері
   const slides = [
     {
       title: 'Start Your Journey Towards A More Active Lifestyle',
-      
+      icon: '🏃',
+      image: { uri: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48' },
+      buttonText: 'Next',
     },
     {
-      title: 'Get Personalized Workout Plans Tailored For You',
-       
+      title: 'Find Nutrition Tips That Fit Your Lifestyle',
+      icon: '🥗',
+      image: { uri: 'https://images.unsplash.com/photo-1540420773420-3366772f4999' }, // Салат ұстаған адам/тағам фоны
+      buttonText: 'Next',
     },
     {
-      title: 'Achieve Your Fitness Goals With FITBODY',
-      
+      title: 'A Community For You, Challenge Yourself',
+      icon: '👥',
+      image: { uri: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd' }, // Залдағы спортшы фоны
+      buttonText: 'Get Started',
     },
   ];
 
   const handleNext = () => {
     if (step < slides.length - 1) {
-      setStep(step + 1); // Осы экранның ішіндегі келесі қадамға өту
+      setStep(step + 1); // Келесі слайдқа өту
     } else {
-      if (onNextScreen) onNextScreen(); // 3 қадам біткен соң WelcomeScreen-ге өту
+      if (onFinish) onFinish(); // Соңғы бетте Get Started басқан соң келесі басты экранға өту
     }
   };
 
   const handleSkip = () => {
-    if (onNextScreen) onNextScreen();
+    if (onFinish) onFinish();
   };
 
   return (
     <ImageBackground 
-      source={{ uri: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48' }} 
+      source={slides[step].image} 
       style={styles.background}
     >
       <SafeAreaView style={styles.container}>
         
+        {/* Жоғарғы оң жақтағы Skip түймесі */}
         <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
           <Text style={styles.skipText}>Skip</Text>
         </TouchableOpacity>
 
+        {/* Ортадағы күлгін блок (мәтіндер мен иконкалар автоматты түрде өзгереді) */}
         <View style={styles.cardContainer}>
           <Text style={styles.cardIcon}>{slides[step].icon}</Text>
           <Text style={styles.cardTitle}>{slides[step].title}</Text>
           
+          {/* Индикатор нүктелері */}
           <View style={styles.dotsContainer}>
             <View style={[styles.dot, step === 0 && styles.activeDot]} />
             <View style={[styles.dot, step === 1 && styles.activeDot]} />
@@ -54,9 +64,10 @@ export default function OnboardingScreen({ onNextScreen }) {
           </View>
         </View>
 
+        {/* Next / Get Started батырмасы */}
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
           <Text style={styles.nextButtonText}>
-            {step === slides.length - 1 ? 'Get Started' : 'Next'}
+            {slides[step].buttonText}
           </Text>
         </TouchableOpacity>
 
@@ -89,7 +100,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   cardContainer: {
-    backgroundColor: '#b19cd9',
+    backgroundColor: '#b19cd9', // Күлгін блок фон түсі
     borderRadius: 20,
     padding: 24,
     alignItems: 'center',

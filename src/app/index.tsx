@@ -22,7 +22,7 @@ export default function Page() {
   } else {
     return (
       <OnboardingScreen 
-        onNextScreen={() => setScreenStep(1)} // Басынан қайта бастау немесе аяқтау
+        onFinish={() => setScreenStep(1)} // Басынан қайта бастау немесе аяқтау
       />
     );
   }
